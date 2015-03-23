@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Todo SPA Example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <script src="https://code.angularjs.org/1.3.9/angular.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+<body ng-app="todoApp">
+    <div class="container">
+        <div class="row">
+            <div class="page-header">SPA Todo Example</div>
+        </div>
+        <div class="row">
+            {{1+2}}
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function(app) {
+
+            function MainController(todoSvc) {
+                this.todoSvc = todoSvc;
+            }
+
+            app.controller("mainCtrl", ["todoSvc", MainController]);
+
+            function TodoService($http) {
+                this.$http == $http;
+            }
+
+            app.service("todoSvc", ["$http", TodoService]);
+
+        })(angular.module("todoApp", []));
+    </script>
+</body>
+</html>

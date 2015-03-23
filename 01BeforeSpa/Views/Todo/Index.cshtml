@@ -1,0 +1,63 @@
+﻿@using System.Web.UI.WebControls
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Todo Before SPA</title>
+</head>
+<body>
+    <div>
+        <form method="POST">
+            <select name="markComplete">
+                <option value="0">--- Select an item to Mark Completed ---</option>
+                @foreach (var todoItem in ViewBag.TodoItems)
+                {
+                    if (todoItem.IsDone)
+                    {
+                        continue;
+                    }
+                    <option value="@todoItem.Id">@todoItem.Description</option>
+                }
+            </select><br/>
+            <label for="filterText">Filter:</label>
+            <input type="text" name="filterText" placeholder="Type text to filter on here."/><br/>
+            <input type="checkbox" name="removeDone"/>
+            <label for="removeDone">Check to remove completed tasks</label><br/>
+            <select name="sortBy">
+                <option value="">No sort</option>
+                <option value="Id">Sort by Id</option>
+                <option value="Completed">Sort by Completed</option>
+                <option value="Description">Sort by Description</option>
+                <option value="DueDate">Sort by Due Date</option>
+            </select>
+            <input type="checkbox" name="sortDescending"/>
+            <label for="sortDescending">Sort Descending</label><br/>
+            <input type="submit" value="Refresh the Form"/>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Completed?</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var todoItem in ViewBag.TodoItems)
+                {
+                    <tr>
+                        <td>@todoItem.IsDone</td>
+                        <td>@todoItem.Description</td>
+                        <td>@todoItem.DueDate.ToLocalTime().Date.ToLongDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table> 
+    </div>
+</body>
+</html>
