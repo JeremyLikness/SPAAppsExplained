@@ -15,7 +15,7 @@ namespace _00Common
 
         private static TodoItem Clone(TodoItem todoItem)
         {
-            Thread.Sleep(Random.Next(10, 500));
+            Thread.Sleep(Random.Next(10, 50));
             var result = new TodoItem();
             Map(todoItem, result);
             return result;
