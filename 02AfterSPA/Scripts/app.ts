@@ -3,12 +3,14 @@ module TodoApp {
 
     var app: ng.IModule = angular.module("todoApp", []);
 
+    // we send this down for sorting/filtering on the server 
     interface ITodoFilter {
         filterText: string;
         columnName: string;
         sortAscending: boolean; 
     }
 
+    // didn't change the serializer so these come back Pascal case
     interface ITodoItem {
         Id: number;
         IsDone: boolean;
@@ -16,12 +18,14 @@ module TodoApp {
         DueDate: string;
     }
 
+    // declaring interfaces makes it easier to test 
     interface ITodoService {
         getItems(filter: ITodoFilter): ng.IPromise<ITodoItem[]>;
         updateItem(item: ITodoItem): ng.IPromise<ITodoItem>;
         deleteItem(item: ITodoItem): ng.IPromise<any>;
     }
 
+    // also makes it easier to conform to the expected API 
     interface ITodoController {
         filter: ITodoFilter;
         items: ITodoItem[];
@@ -33,6 +37,8 @@ module TodoApp {
         noCompleted: () => boolean;
     }
 
+    // module definitions provide insights into third-party APIs, 
+    // even if they aren't written in TypeScript 
     interface IToggleColumn extends ng.IScope {
         toggle: () => void;
         changeColumn: (columnName: { colName: string }) => void;
@@ -42,6 +48,7 @@ module TodoApp {
         sortAscending: boolean;
     }
 
+    // Typescript translates enums to objects you can access via value or string
     enum Columns {
         Id,
         Completed,
@@ -49,13 +56,18 @@ module TodoApp {
         DueDate
     }
 
+    // to make this available to other modules I'd export it, but because I
+    // am just registering with Angular I keep it local to the module
     class TodoService implements ITodoService {
         constructor(private $q: ng.IQService, private $http: ng.IHttpService) {
             
         }
 
+        // this let's Angular know what dependencies to inject even after your
+        // code is minimized
         public static $inject: string[] = ["$q", "$http"];
 
+        // promises are a way to handle asynchronous operations
         public getItems(filter: ITodoFilter): ng.IPromise<ITodoItem[]> {
             var defer = this.$q.defer();
             this.$http.get("/api/todo", {
@@ -87,8 +99,11 @@ module TodoApp {
         }
     }
 
+    // this registers the service with dependency injection
     app.service("todoSvc", TodoService);
 
+    // controllers provide the "glue" for data binding. Any public properties
+    // can be accessed via declarative markup
     class TodoController implements ITodoController {
         constructor(private todoSvc: ITodoService) {
             this.filter = {
@@ -184,6 +199,9 @@ module TodoApp {
 
     app.controller("todoCtrl", TodoController);
 
+    // directives provide reusable components. In this case the HTML for a header
+    // and the logic to change the sort when the column header is clicked is all
+    // encapsulated in a reusable component
     function columnToggle() : ng.IDirective {
         var directive: ng.IDirective = <ng.IDirective>{
             restrict: "E",

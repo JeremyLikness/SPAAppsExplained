@@ -7,11 +7,24 @@ using _02AfterSPA.Models;
 
 namespace _02AfterSPA.api
 {
+    /// <summary>
+    /// This is the REST interface for the to-do list
+    /// </summary>
+    /// <remarks>
+    /// To learn more about the Web API, watch my Web API Jumpstart:
+    /// http://csharperimage.jeremylikness.com/2015/01/web-api-design-jumpstart.html 
+    /// </remarks>
     [RoutePrefix("api/todo")]
     public class TodoController : ApiController
     {
+        /// <summary>
+        /// Only for demos
+        /// </summary>
         private static readonly TodoRepository Repo = new TodoRepository();
 
+        /// <summary>
+        /// This maps a column name to the strategy for sorting it 
+        /// </summary>
         private static readonly IDictionary
                 <string,
                     Tuple
@@ -41,6 +54,15 @@ namespace _02AfterSPA.api
                                 q => q.OrderBy(i => i.DueDate), q => q.OrderByDescending(i => i.DueDate)));
         }
 
+        /// <summary>
+        /// This will get the list of items
+        /// </summary>
+        /// <remarks>
+        /// By default, complex types are parsed from the body. This is "get" so we want to be explicit
+        /// about the parts of the complex type being passed as query string parameters
+        /// </remarks>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [Route("")]
         [HttpGet]
         public IHttpActionResult Get([FromUri]TodoFilter filter)
@@ -71,6 +93,11 @@ namespace _02AfterSPA.api
             return Ok(query.ToList());
         }
 
+        /// <summary>
+        /// Delete it 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("{id}")]
         [HttpDelete]
         public IHttpActionResult Delete(int id)
@@ -86,6 +113,11 @@ namespace _02AfterSPA.api
             }
         }
 
+        /// <summary>
+        /// Add a new item 
+        /// </summary>
+        /// <param name="newItem"></param>
+        /// <returns></returns>
         [Route("")]
         [HttpPut]
         public IHttpActionResult Add(TodoItem newItem)
@@ -100,6 +132,11 @@ namespace _02AfterSPA.api
             }
         }
 
+        /// <summary>
+        /// Update an existing item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         [Route("")]
         [HttpPost]
         public IHttpActionResult Update(TodoItem item)
@@ -112,6 +149,6 @@ namespace _02AfterSPA.api
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }        
     }
 }

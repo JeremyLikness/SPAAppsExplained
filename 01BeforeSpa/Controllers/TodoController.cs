@@ -9,6 +9,9 @@ namespace _01BeforeSpa.Controllers
     {
         private static readonly TodoRepository Repo;
 
+        /// <summary>
+        /// This is not production code ready. Demos only, please!
+        /// </summary>
         static TodoController()
         {
             Repo = new TodoRepository();
